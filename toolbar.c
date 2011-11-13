@@ -24,7 +24,7 @@
 
 #include "sigrok-gtk.h"
 
-static void prop_edited(GtkCellRendererText *cel, gchar *path, gchar *text, 
+static void prop_edited(GtkCellRendererText *cel, gchar *path, gchar *text,
 			GtkListStore *props)
 {
 	(void)cel;
@@ -36,7 +36,7 @@ static void prop_edited(GtkCellRendererText *cel, gchar *path, gchar *text,
 	int ret;
 
 	gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(props), &iter, path);
-	gtk_tree_model_get(GTK_TREE_MODEL(props), &iter, 
+	gtk_tree_model_get(GTK_TREE_MODEL(props), &iter,
 				0, &cap, 1, &type, -1);
 
 	switch (type) {
@@ -64,20 +64,20 @@ static void dev_set_options(GtkAction *action, GtkWindow *parent)
 	(void)action;
 
 	struct sr_device *device = g_object_get_data(G_OBJECT(parent), "device");
-	if (!device) 
+	if (!device)
 		return;
 
 	GtkWidget *dialog = gtk_dialog_new_with_buttons("Device Properties",
-					parent, GTK_DIALOG_MODAL, 
+					parent, GTK_DIALOG_MODAL,
 					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					NULL);
 	GtkWidget *sw = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw), 
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_widget_set_size_request(sw, 300, 200);
 	GtkWidget *tv = gtk_tree_view_new();
 	gtk_container_add(GTK_CONTAINER(sw), tv);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), sw, 
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), sw,
 				TRUE, TRUE, 0);
 
 	/* Populate list store with config options */
@@ -93,15 +93,15 @@ static void dev_set_options(GtkAction *action, GtkWindow *parent)
 		if (!(hwo = sr_find_hwcap_option(capabilities[cap])))
 			continue;
 		gtk_list_store_append(props, &iter);
-		gtk_list_store_set(props, &iter, 0, capabilities[cap], 
-					1, hwo->type, 2, hwo->shortname, 
+		gtk_list_store_set(props, &iter, 0, capabilities[cap],
+					1, hwo->type, 2, hwo->shortname,
 					4, hwo->description, -1);
 	}
 
 	/* Popup tooltop containing description if mouse hovers */
 	gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(tv), 4);
 
-	/* Save device with list so that property can be set by edited 
+	/* Save device with list so that property can be set by edited
 	 * handler. */
 	g_object_set_data(G_OBJECT(props), "device", device);
 
@@ -125,7 +125,7 @@ static void dev_set_options(GtkAction *action, GtkWindow *parent)
 	gtk_widget_destroy(dialog);
 }
 
-static void probe_toggled(GtkCellRenderer *cel, gchar *path, 
+static void probe_toggled(GtkCellRenderer *cel, gchar *path,
 			GtkTreeModel *probes)
 {
 	struct sr_device *device = g_object_get_data(G_OBJECT(probes), "device");
@@ -143,7 +143,7 @@ static void probe_toggled(GtkCellRenderer *cel, gchar *path,
 	gtk_list_store_set(GTK_LIST_STORE(probes), &iter, 1, probe->enabled, -1);
 }
 
-static void probe_named(GtkCellRendererText *cel, gchar *path, gchar *text, 
+static void probe_named(GtkCellRendererText *cel, gchar *path, gchar *text,
 			GtkTreeModel *probes)
 {
 	struct sr_device *device = g_object_get_data(G_OBJECT(probes), "device");
@@ -163,20 +163,20 @@ static void dev_set_probes(GtkAction *action, GtkWindow *parent)
 	(void)action;
 
 	struct sr_device *device = g_object_get_data(G_OBJECT(parent), "device");
-	if (!device) 
+	if (!device)
 		return;
 
 	GtkWidget *dialog = gtk_dialog_new_with_buttons("Configure Probes",
-					parent, GTK_DIALOG_MODAL, 
+					parent, GTK_DIALOG_MODAL,
 					GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
 					NULL);
 	GtkWidget *sw = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw), 
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 				GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_widget_set_size_request(sw, 300, 200);
 	GtkWidget *tv = gtk_tree_view_new();
 	gtk_container_add(GTK_CONTAINER(sw), tv);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), sw, 
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), sw,
 				TRUE, TRUE, 0);
 
 	/* Populate list store with probe options */
@@ -193,7 +193,7 @@ static void dev_set_probes(GtkAction *action, GtkWindow *parent)
 					1, probe->enabled, 2, probe->name, -1);
 	}
 
-	/* Save device with list so that property can be set by edited 
+	/* Save device with list so that property can be set by edited
 	 * handler. */
 	g_object_set_data(G_OBJECT(probes), "device", device);
 
@@ -330,7 +330,7 @@ static const GtkActionEntry action_items[] = {
 		"Configure Probes", G_CALLBACK(dev_set_probes)},
 	{"DevAcquire", GTK_STOCK_EXECUTE, "_Acquire", "<control>A",
 		"Acquire Samples", G_CALLBACK(capture_run)},
-	{"Exit", GTK_STOCK_QUIT, "E_xit", "<control>Q", 
+	{"Exit", GTK_STOCK_QUIT, "E_xit", "<control>Q",
 		"Exit the program", G_CALLBACK(gtk_main_quit) },
 
 	{"ViewMenu", NULL, "_View", NULL, NULL, NULL},
@@ -340,19 +340,19 @@ static const GtkActionEntry action_items[] = {
 		G_CALLBACK(zoom_out)},
 
 	{"HelpMenu", NULL, "_Help", NULL, NULL, NULL},
-	{"HelpWiki", GTK_STOCK_ABOUT, "Sigrok _Wiki", NULL, NULL, 
+	{"HelpWiki", GTK_STOCK_ABOUT, "Sigrok _Wiki", NULL, NULL,
 		G_CALLBACK(help_wiki)},
-	{"HelpAbout", GTK_STOCK_ABOUT, "_About", NULL, NULL, 
+	{"HelpAbout", GTK_STOCK_ABOUT, "_About", NULL, NULL,
 		G_CALLBACK(help_about)},
 };
 
 static const GtkToggleActionEntry toggle_items[] = {
 	/* name, stock-id, label, accel, tooltip, callback, isactive */
-	{"ViewLog", GTK_STOCK_JUSTIFY_LEFT, "_Log", NULL, NULL, 
+	{"ViewLog", GTK_STOCK_JUSTIFY_LEFT, "_Log", NULL, NULL,
 		G_CALLBACK(toggle_log), FALSE},
 };
 
-static const char ui_xml[] = 
+static const char ui_xml[] =
 "<ui>"
 "  <menubar>"
 "    <menu action='DevMenu'>"
@@ -398,9 +398,9 @@ GtkWidget *toolbar_init(GtkWindow *parent)
 	GtkWidget *vbox = gtk_vbox_new(FALSE, 0);
 	GtkToolbar *toolbar;
 	GtkActionGroup *ag = gtk_action_group_new("Actions");
-	gtk_action_group_add_actions(ag, action_items, 
+	gtk_action_group_add_actions(ag, action_items,
 					G_N_ELEMENTS(action_items), parent);
-	gtk_action_group_add_toggle_actions(ag, toggle_items, 
+	gtk_action_group_add_toggle_actions(ag, toggle_items,
 					G_N_ELEMENTS(toggle_items), parent);
 
 	GtkUIManager *ui = gtk_ui_manager_new();

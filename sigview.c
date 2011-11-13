@@ -68,7 +68,7 @@ static gboolean do_scroll_event(GtkTreeView *tv, GdkEventScroll *e)
 	return TRUE;
 }
 
-static gboolean do_motion_event(GtkWidget *tv, GdkEventMotion *e, 
+static gboolean do_motion_event(GtkWidget *tv, GdkEventMotion *e,
 				GObject *cel)
 {
 	GObject *siglist;
@@ -80,8 +80,8 @@ static gboolean do_motion_event(GtkWidget *tv, GdkEventMotion *e,
 	gint width;
 	gdouble scale;
 
-	x = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(tv), "motion-x")); 
-	g_object_set_data(G_OBJECT(tv), "motion-x", GINT_TO_POINTER((gint)e->x)); 
+	x = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(tv), "motion-x"));
+	g_object_set_data(G_OBJECT(tv), "motion-x", GINT_TO_POINTER((gint)e->x));
 
 	siglist = G_OBJECT(gtk_tree_view_get_model(GTK_TREE_VIEW(tv)));
 	data = g_object_get_data(siglist, "sampledata");
@@ -101,7 +101,7 @@ static gboolean do_motion_event(GtkWidget *tv, GdkEventMotion *e,
 	return TRUE;
 }
 
-static gboolean do_button_event(GtkTreeView *tv, GdkEventButton *e, 
+static gboolean do_button_event(GtkTreeView *tv, GdkEventButton *e,
 				GObject *cel)
 {
 	int h;
@@ -120,15 +120,15 @@ static gboolean do_button_event(GtkTreeView *tv, GdkEventButton *e,
 		if (col != g_object_get_data(G_OBJECT(tv), "signalcol"))
 			return FALSE;
 		h = g_signal_connect(tv, "motion-notify-event", G_CALLBACK(do_motion_event), cel);
-		g_object_set_data(G_OBJECT(tv), "motion-handler", GINT_TO_POINTER(h)); 
-		g_object_set_data(G_OBJECT(tv), "motion-x", GINT_TO_POINTER((gint)e->x)); 
+		g_object_set_data(G_OBJECT(tv), "motion-handler", GINT_TO_POINTER(h));
+		g_object_set_data(G_OBJECT(tv), "motion-x", GINT_TO_POINTER((gint)e->x));
 		break;
 	case GDK_BUTTON_RELEASE:
-		h = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(tv), "motion-handler")); 
-		if (!h) 
+		h = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(tv), "motion-handler"));
+		if (!h)
 			return TRUE;
 		g_signal_handler_disconnect(GTK_WIDGET(tv), h);
-		g_object_set_data(G_OBJECT(tv), "motion-handler", NULL); 
+		g_object_set_data(G_OBJECT(tv), "motion-handler", NULL);
 		break;
 	default:
 		/* Surpress warning about unswitch enum values */
@@ -165,7 +165,7 @@ GtkWidget *sigview_init(void)
 	g_object_set_data(G_OBJECT(tv), "signalcol", col);
 	g_object_set_data(G_OBJECT(tv), "signalcel", cel);
 	gtk_tree_view_column_pack_start(col, cel, TRUE);
-	gtk_tree_view_column_set_cell_data_func(col, cel, format_func, 
+	gtk_tree_view_column_set_cell_data_func(col, cel, format_func,
 					NULL, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(tv), col);
 
@@ -201,7 +201,7 @@ void sigview_zoom(GtkWidget *sigview, gdouble zoom, gint offset)
 	data = g_object_get_data(
 		G_OBJECT(gtk_tree_view_get_model(GTK_TREE_VIEW(sigview))),
 		"sampledata");
-	if (!data) 
+	if (!data)
 		return;
 	nsamples = (data->len / g_array_get_element_size(data)) - 1;
 
@@ -215,7 +215,7 @@ void sigview_zoom(GtkWidget *sigview, gdouble zoom, gint offset)
 
 	ofs -= offset;
 
-	if (ofs < 0) 
+	if (ofs < 0)
 		ofs = 0;
 
 	if (scale < (double)width/nsamples)

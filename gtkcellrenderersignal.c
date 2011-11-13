@@ -41,7 +41,7 @@ struct _GtkCellRendererSignalPrivate
 };
 
 static void gtk_cell_renderer_signal_finalize(GObject *object);
-static void gtk_cell_renderer_signal_get_property(GObject *object, 
+static void gtk_cell_renderer_signal_get_property(GObject *object,
 				guint param_id, GValue *value,
 				GParamSpec *pspec);
 static void gtk_cell_renderer_signal_set_property(GObject *object,
@@ -54,7 +54,7 @@ static void gtk_cell_renderer_signal_get_size(GtkCellRenderer *cell,
 				gint *y_offset,
 				gint *width,
 				gint *height);
-static void gtk_cell_renderer_signal_render(GtkCellRenderer *cell, 
+static void gtk_cell_renderer_signal_render(GtkCellRenderer *cell,
 				GdkWindow *window,
 				GtkWidget *widget,
 				GdkRectangle *background_area,
@@ -62,7 +62,7 @@ static void gtk_cell_renderer_signal_render(GtkCellRenderer *cell,
 				GdkRectangle *expose_area,
 				GtkCellRendererState flags);
 
-     
+
 G_DEFINE_TYPE(GtkCellRendererSignal, gtk_cell_renderer_signal, GTK_TYPE_CELL_RENDERER);
 
 static void
@@ -70,14 +70,14 @@ gtk_cell_renderer_signal_class_init (GtkCellRendererSignalClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS (klass);
-  
+
 	object_class->finalize = gtk_cell_renderer_signal_finalize;
 	object_class->get_property = gtk_cell_renderer_signal_get_property;
 	object_class->set_property = gtk_cell_renderer_signal_set_property;
-  
+
 	cell_class->get_size = gtk_cell_renderer_signal_get_size;
 	cell_class->render = gtk_cell_renderer_signal_render;
-  
+
 	g_object_class_install_property(object_class,
 				PROP_DATA,
 				g_param_spec_pointer("data",
@@ -117,7 +117,7 @@ gtk_cell_renderer_signal_class_init (GtkCellRendererSignalClass *klass)
 						0, G_MAXINT, 0,
 						G_PARAM_READWRITE));
 
-	g_type_class_add_private (object_class, 
+	g_type_class_add_private (object_class,
 			sizeof (GtkCellRendererSignalPrivate));
 }
 
@@ -158,7 +158,7 @@ gtk_cell_renderer_signal_get_property(GObject *object,
 {
 	GtkCellRendererSignal *cel = GTK_CELL_RENDERER_SIGNAL(object);
 	GtkCellRendererSignalPrivate *priv = cel->priv;
-  
+
 	switch (param_id) {
 	case PROP_DATA:
 		g_value_set_pointer(value, priv->data);
@@ -185,7 +185,7 @@ gtk_cell_renderer_signal_set_property(GObject *object,
 {
 	GtkCellRendererSignal *cel = GTK_CELL_RENDERER_SIGNAL(object);
 	GtkCellRendererSignalPrivate *priv = cel->priv;
-  
+
 	switch (param_id) {
 	case PROP_DATA:
 		priv->data = g_value_get_pointer(value);
@@ -229,12 +229,12 @@ gtk_cell_renderer_signal_get_size(GtkCellRenderer *cell,
 }
 
 
-static gboolean sample(GArray *data, gint probe, guint i) 
+static gboolean sample(GArray *data, gint probe, guint i)
 {
 	guint16 *tmp16;
 	guint32 *tmp32;
 
-	g_return_val_if_fail(i < (data->len / g_array_get_element_size(data)), 
+	g_return_val_if_fail(i < (data->len / g_array_get_element_size(data)),
 				FALSE);
 
 	switch (g_array_get_element_size(data)) {
@@ -292,17 +292,17 @@ gtk_cell_renderer_signal_render(GtkCellRenderer *cell,
 	cairo_new_path(cr);
 
 	si = priv->offset / priv->scale;
-	if (si >= nsamples) 
+	if (si >= nsamples)
 		return;
 	o = x - (priv->offset - si * priv->scale);
 
-	cairo_move_to(cr, o, y + 
+	cairo_move_to(cr, o, y +
 		(sample(priv->data, priv->probe, si++) ? 0 : h));
 	o += priv->scale;
-	while((si < nsamples) && (o - priv->scale < x+w)) {
-		cairo_line_to(cr, o, y + 
+	while ((si < nsamples) && (o - priv->scale < x+w)) {
+		cairo_line_to(cr, o, y +
 			(sample(priv->data, priv->probe, si-1) ? 0 : h));
-		cairo_line_to(cr, o, y + 
+		cairo_line_to(cr, o, y +
 			(sample(priv->data, priv->probe, si) ? 0 : h));
 		o += priv->scale;
 		si++;

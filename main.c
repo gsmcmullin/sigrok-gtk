@@ -24,11 +24,11 @@
 GtkWidget *sigview;
 
 static const char *colours[8] = {
-	"black", "brown", "red", "orange", 
+	"black", "brown", "red", "orange",
 	"gold", "darkgreen", "blue", "magenta",
 };
 
-static void 
+static void
 datafeed_in(struct sr_device *device, struct sr_datafeed_packet *packet)
 {
 	static int probelist[65] = { 0 };
@@ -53,8 +53,8 @@ datafeed_in(struct sr_device *device, struct sr_datafeed_packet *packet)
 				GtkTreeIter iter;
 				probelist[num_enabled_probes++] = probe->index;
 				gtk_list_store_append(siglist, &iter);
-				gtk_list_store_set(siglist, &iter, 
-						0, probe->name, 
+				gtk_list_store_set(siglist, &iter,
+						0, probe->name,
 						1, colours[(num_enabled_probes - 1) & 7],
 						2, num_enabled_probes - 1,
 						-1);
@@ -86,7 +86,7 @@ datafeed_in(struct sr_device *device, struct sr_datafeed_packet *packet)
 		break;
 	}
 
-	if (!logic) 
+	if (!logic)
 		return;
 
 	if (sr_filter_probes(sample_size, unitsize, probelist,
